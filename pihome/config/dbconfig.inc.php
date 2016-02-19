@@ -12,22 +12,18 @@
  *
 */
 
-/* MySql Daten */
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
-define('DB_NAME', 'pihome');
-define('DB_CHARSET', 'utf8');
+define('DB_FILE', 'pihome.db');
 define('PREFIX', 'pi_');
 
 define('LANGUAGE', 'en');
 define('BASE', 'http://'.$_SERVER['HTTP_HOST'].'/');
-define('SERVER_PATH', '/home/www/');
+define('SERVER_PATH', '/var/www/pihome');
+define('SEND_PATH', '/home/dev/rcswitch-pi');
 
 function name($name)
 {
     $n = explode(" ", $name);
-    if(count($n)==0)
+    if(count($n)==1)
     {
         $r = $name[0].$name[1];
     }else{

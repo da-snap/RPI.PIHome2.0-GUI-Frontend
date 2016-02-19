@@ -16,7 +16,7 @@ require_once '/home/www/cron/functions.inc.php';
 
 // Load Settings Data
 $settings = settings();
-date_default_timezone_set($settings['timezone']);  
+date_default_timezone_set($settings['timezone']);
 
 if($settings['gcal_ical_activ']==true){
 
@@ -35,20 +35,20 @@ if($settings['gcal_ical_activ']==true){
         if($sum == true AND $dts == true AND $dte == true){
 
             $su = explode("SUMMARY:", $event);
-            $su1 = explode("\n", $su[1]);        
+            $su1 = explode("\n", $su[1]);
             $ts = explode("DTSTART:", $event);
-            $ts1 = explode("\n", $ts[1]);        
+            $ts1 = explode("\n", $ts[1]);
             $te = explode("DTEND:", $event);
-            $te1 = explode("\n", $te[1]);        
+            $te1 = explode("\n", $te[1]);
             $now = time();
 
             if($now >= strtotime($ts1[0]) AND $now <= strtotime($te1[0])){
 
                 $su2 = explode("_", trim($su1[0]));
-                $lampID = trim($su2[0]); 
+                $lampID = trim($su2[0]);
                 $action = trim($su2[1]);
                 $stat = checkLightStatus($lampID);
-                $co = getCodeById($lampID);        
+                $co = getCodeById($lampID);
                 $code = $co["code"];
 
                 if($co['letter']=="A"){ $letter = "1";
@@ -57,15 +57,15 @@ if($settings['gcal_ical_activ']==true){
                 }elseif($co['letter']=="D"){ $letter = "4"; }
 
                 if($action=="on" AND $stat=="0")
-                {            
+                {
                     #echo "AN ".$action." - ".date("d.m.Y - H:i:s")."\n";
-                    shell_exec('sudo /home/div/rcswitch-pi/send '.$code.' '.$letter.' 1 ');
+                    shell_exec('sudo ' . SEND_PATH . '/send '.$code.' '.$letter.' 1 ');
                     setLightStatus($lampID,$action);
 
                 }elseif($action=="off" AND $stat=="1")
-                {            
+                {
                     #echo "AUS ".$action." - ".date("d.m.Y - H:i:s")."\n";
-                    shell_exec('sudo /home/div/rcswitch-pi/send '.$code.' '.$letter.' 0 ');
+                    shell_exec('sudo ' . SEND_PATH . '/send '.$code.' '.$letter.' 0 ');
                     setLightStatus($lampID,$action);
 
                 }
@@ -74,7 +74,7 @@ if($settings['gcal_ical_activ']==true){
 
         }
     }
-    
+
 }
 
 ?>

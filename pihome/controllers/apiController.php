@@ -1,53 +1,53 @@
 <?php
 
-class apiController 
+class apiController
 {
 
-  private $_model;   
+  private $_model;
 
-  public function __construct() 
+  public function __construct()
   {
-    require_once 'models/homeModel.php'; 
-    $this->_model = new homeModel();  
+    require_once 'models/homeModel.php';
+    $this->_model = new homeModel();
   }
 
-    
-  public function indexAction() 
-  {    
-        if(($_GET['ak']!="" && $this->_model->checkApiKey($_GET['ak'])!="0" && $_GET['ch']!="" && $_GET['co']!="" && $_GET['s']!=""))  
+
+  public function indexAction()
+  {
+        if(($_GET['ak']!="" && $this->_model->checkApiKey($_GET['ak'])!="0" && $_GET['ch']!="" && $_GET['co']!="" && $_GET['s']!=""))
         {
             $char = $this->letter($_GET['ch']);
             $code = $_GET['co'];
             $status = $_GET['s'];
             // execute rcswitch-pi
-            shell_exec('sudo /home/div/rcswitch-pi/send '.$code.' '.$char.' '.$status.' ');
-            // Set device status            
-            $setlamp = $this->_model->setDeviceStatusByCode($_GET['ch'], $code, $status);            
-            echo $setlamp;       
-        }    
+            shell_exec('sudo ' . SEND_PATH . '/send '.$code.' '.$char.' '.$status.' ');
+            // Set device status
+            $setlamp = $this->_model->setDeviceStatusByCode($_GET['ch'], $code, $status);
+            echo $setlamp;
+        }
   }
-    
-    
-    
-  public function alloffAction() 
-  {    
-        if(($_GET['ak']!="" && $this->_model->checkApiKey($_GET['ak'])!="0"))  
-        {            
-            // All Off            
+
+
+
+  public function alloffAction()
+  {
+        if(($_GET['ak']!="" && $this->_model->checkApiKey($_GET['ak'])!="0"))
+        {
+            // All Off
             $lights = $this->_model->getDeviceOn();
             foreach($lights as $light){
-                $stat = "0";    
-                $letter = $this->letter($light['letter']);            
+                $stat = "0";
+                $letter = $this->letter($light['letter']);
                 // execute rcswitch-pi
-                shell_exec('sudo /home/div/rcswitch-pi/send '.$light['code'].' '.$letter.' '.$stat.' ');      
+                shell_exec('sudo ' . SEND_PATH . '/send '.$light['code'].' '.$letter.' '.$stat.' ');
                 // Set device status
                 $this->_model->setDeviceStatus($light['id'],$stat);
             }
-            echo 1;      
-        }    
+            echo 1;
+        }
   }
-    
-    
+
+
   private function letter($code)
   {
         if($code=="A"){
@@ -63,6 +63,6 @@ class apiController
         }
         return $letter;
   }
-    
-  
+
+
 }

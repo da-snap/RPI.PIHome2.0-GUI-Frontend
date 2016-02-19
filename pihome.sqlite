@@ -1,0 +1,78 @@
+CREATE TABLE pi_devices (
+	id INTEGER PRIMARY KEY,
+	room_id CHAR(255) NOT NULL,
+	device CHAR(255) NOT NULL,
+	letter CHAR(55) NOT NULL,
+	code CHAR(55) NOT NULL DEFAULT '00000',
+	status CHAR(55) NOT NULL DEFAULT '0',
+	sort CHAR(55) NOT NULL DEFAULT '0',
+	sunset CHAR(55) NOT NULL DEFAULT '0',
+	aktiv CHAR(55) NOT NULL DEFAULT '0'
+);
+
+CREATE TABLE pi_admin(
+	id INT PRIMARY KEY NOT NULL,
+	user CHAR(255) NOT NULL,
+	pass CHAR(255) NOT NULL,
+	name CHAR(155) NOT NULL,
+	admin CHAR(1) NOT NULL DEFAULT '0',
+	color CHAR(7) NOT NULL,
+	apikey CHAR(32) NOT NULL
+);
+
+INSERT INTO pi_admin (id, user, pass, name, admin, color, apikey)
+VALUES (1, 'admin', 'pihome', 'John Doe', '1', '#187ac1', 's9XcHG3xISfcNc7THYgaWdyjqdsaiJUN');
+
+INSERT INTO pi_admin (id, user, pass, name, admin, color, apikey)
+VALUES (2, '', '', 'Home Guest', '0', '#F35D5D', 'o8ZcGa3UISV3gc7eqW3aWLKIqdLOuJ26');
+
+INSERT INTO pi_devices (id, room_id, device, letter, code, status, sort, sunset, aktiv)
+VALUES (1, '1', 'Lamp One', 'A', '00000', '0', '0', '0', '1');
+
+INSERT INTO pi_devices (id, room_id, device, letter, code, status, sort, sunset, aktiv)
+VALUES (2, '1', 'Lamp Two', 'B', '00000', '0', '0', '0', '1');
+
+INSERT INTO pi_devices (id, room_id, device, letter, code, status, sort, sunset, aktiv)
+VALUES (3, '1', 'Lamp Three', 'C', '00000', '0', '0', '0', '1');
+
+INSERT INTO pi_devices (id, room_id, device, letter, code, status, sort, sunset, aktiv)
+VALUES (4, '1', 'Lamp Four', 'D', '00000', '0', '0', '0', '1');
+
+CREATE TABLE pi_rooms(
+	id INT PRIMARY KEY NOT NULL,
+	room CHAR(255) NOT NULL
+);
+
+INSERT INTO pi_rooms (id, room)
+VALUES (1, 'living room');
+
+CREATE TABLE pi_settings(
+	id INT PRIMARY KEY NOT NULL,
+	name CHAR(155) NOT NULL,
+	value CHAR(155) NOT NULL
+);
+
+INSERT INTO pi_settings (id, name, value)
+VALUES (5, 'city', 'Berlin');
+INSERT INTO pi_settings (id, name, value)
+VALUES (6, 'timezone', 'Europe/Berlin');
+INSERT INTO pi_settings (id, name, value)
+VALUES (7, 'weather', 'true');
+INSERT INTO pi_settings (id, name, value)
+VALUES (8, 'sunrise', 'false');
+INSERT INTO pi_settings (id, name, value)
+VALUES (10, 'country_code', 'DE');
+INSERT INTO pi_settings (id, name, value)
+VALUES (11, 'weather_option', 'c_kms');
+INSERT INTO pi_settings (id, name, value)
+VALUES (13, 'gcal_ical_activ', 'false');
+INSERT INTO pi_settings (id, name, value)
+VALUES (14, 'gcal_ical', '');
+INSERT INTO pi_settings (id, name, value)
+VALUES (17, 'oc_ical', 'false');
+INSERT INTO pi_settings (id, name, value)
+VALUES (18, 'oc_user', '');
+INSERT INTO pi_settings (id, name, value)
+VALUES (19, 'oc_pass', '');
+INSERT INTO pi_settings (id, name, value)
+VALUES (20, 'oc_ical_url', '');

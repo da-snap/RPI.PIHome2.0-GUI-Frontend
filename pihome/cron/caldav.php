@@ -17,11 +17,11 @@ require_once '/home/www/cron/CalDAVClient.php';
 
 // Load Settings Data
 $settings = settings();
-date_default_timezone_set($settings['timezone']);  
+date_default_timezone_set($settings['timezone']);
 
 if($settings['oc_ical']==true)
-{    
-    
+{
+
     $url = parse_url($settings['oc_ical_url']);
     if($url['scheme']=="https"){ $port = "443"; }else{ $port = "80"; }
     $acc["davical"] = array(
@@ -31,45 +31,45 @@ if($settings['oc_ical']==true)
         "port" => $port,
         "uri" => $settings['oc_ical_url']
     );
-    $account = $acc["davical"];    
-    $cal = new CalDAVClient( $account["uri"], $account["user"], $account["pass"], "", $account["server"], $account["port"] );    
-    $events = $cal->GetEvents($sta, $end);    
-    foreach($events AS $k => $event) 
-    {                          
-        $ce = explode("VEVENT", $event['data']);            
+    $account = $acc["davical"];
+    $cal = new CalDAVClient( $account["uri"], $account["user"], $account["pass"], "", $account["server"], $account["port"] );
+    $events = $cal->GetEvents($sta, $end);
+    foreach($events AS $k => $event)
+    {
+        $ce = explode("VEVENT", $event['data']);
         $su = explode("SUMMARY:", $ce[1]);
-        $su1 = explode("\n", $su[1]);                    
-        preg_match("/DTSTART;(.*):(.*)/", $ce[1], $treffer);                    
-        $sta = strtotime($treffer[2]);            
-        $end = strtotime($treffer[2])+(60*1);        
-        $now = time();        
+        $su1 = explode("\n", $su[1]);
+        preg_match("/DTSTART;(.*):(.*)/", $ce[1], $treffer);
+        $sta = strtotime($treffer[2]);
+        $end = strtotime($treffer[2])+(60*1);
+        $now = time();
         if(( $now >= $sta && $now <= $end ))
-        {            
+        {
             $su2 = explode("_", trim($su1[0]));
-            $lampID = trim($su2[0]); 
+            $lampID = trim($su2[0]);
             $action = trim($su2[1]);
             $stat = checkLightStatus($lampID);
-            $co = getCodeById($lampID);        
+            $co = getCodeById($lampID);
             $code = $co["code"];
             if($co['letter']=="A"){ $letter = "1";
             }elseif($co['letter']=="B"){ $letter = "2";
             }elseif($co['letter']=="C"){ $letter = "3";
-            }elseif($co['letter']=="D"){ $letter = "4"; 
+            }elseif($co['letter']=="D"){ $letter = "4";
             }elseif($co['letter']=="E"){ $letter = "5"; }
             if($action=="on" AND $stat=="0")
-            {                                
-                shell_exec('sudo /home/div/rcswitch-pi/send '.$code.' '.$letter.' 1 ');
+            {
+                shell_exec('sudo ' . SEND_PATH . '/send '.$code.' '.$letter.' 1 ');
                 setLightStatus($lampID,$action);
 
             }elseif($action=="off" AND $stat=="1")
-            {                                
-                shell_exec('sudo /home/div/rcswitch-pi/send '.$code.' '.$letter.' 0 ');
+            {
+                shell_exec('sudo ' . SEND_PATH . '/send '.$code.' '.$letter.' 0 ');
                 setLightStatus($lampID,$action);
-            }            
-        }          
-        
+            }
+        }
+
     }
-    
+
 }
 
 ?>
